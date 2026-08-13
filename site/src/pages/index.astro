@@ -105,6 +105,16 @@ function getSourceLabel(line) {
     .trim();
 }
 
+function getSourceHref(line) {
+  const markdownLink = line.match(/\[[^\]]+\]\((https?:\/\/[^)\s]+)\)/i);
+  if (markdownLink) {
+    return markdownLink[1];
+  }
+
+  const bareUrl = line.match(/https?:\/\/[^\s<>)]+/i);
+  return bareUrl ? bareUrl[0].replace(/[.,;:!?]+$/, '') : '';
+}
+
 function isTableLine(line) {
   return /^\|.*\|$/.test(line);
 }
@@ -140,6 +150,7 @@ const contentUpdates = getMarkdownSections(githubInfoMarkdown)
     const { paragraphs, bullets, summary } = getEntryContent(entry.lines);
     const sourceLine = entry.lines.find((line) => isSourceLine(line.trim()));
     const sourceLabel = sourceLine ? getSourceLabel(sourceLine) : '';
+    const sourceHref = sourceLine ? getSourceHref(sourceLine) : '';
     const postedDate = getPostedDate({ sourceLabel, summary });
 
     return {
@@ -148,7 +159,7 @@ const contentUpdates = getMarkdownSections(githubInfoMarkdown)
       section: section.title,
       title: entry.title,
       summary,
-      href: '#content-sources',
+      href: sourceHref || '#content-sources',
       bullets,
       sourceLabel,
       hasDetails: paragraphs.length > 0 || bullets.length > 0,
@@ -159,12 +170,11 @@ const contentUpdates = getMarkdownSections(githubInfoMarkdown)
 
 const latestContentUpdates = contentUpdates.filter((update) => update.section === 'Latest GitHub Updates');
 const supportingContentUpdates = contentUpdates.filter((update) => update.section !== 'Latest GitHub Updates');
-const latestBlogOrChangelogUpdates = latestContentUpdates.filter((update) =>
-  /github\s+(blog|changelog)/i.test(update.sourceLabel)
-);
-const latestOtherUpdates = latestContentUpdates.filter((update) =>
-  !/github\s+(blog|changelog)/i.test(update.sourceLabel)
-);
+const isGitHubEditorialUpdate = (update) =>
+  /github\s+(blog|changelog)/i.test(update.sourceLabel) ||
+  /https?:\/\/(?:www\.)?github\.blog(?:\/|$)/i.test(update.href);
+const latestBlogOrChangelogUpdates = latestContentUpdates.filter(isGitHubEditorialUpdate);
+const latestOtherUpdates = latestContentUpdates.filter((update) => !isGitHubEditorialUpdate(update));
 
 const latestMarkdownHighlight = latestBlogOrChangelogUpdates.find(
   (update) => update.title !== 'Latest GitHub Updates'
@@ -176,8 +186,8 @@ const latestRelease = latestMarkdownHighlight
     title: latestMarkdownHighlight.title,
     date: latestMarkdownHighlight.date,
     summary: latestMarkdownHighlight.summary,
-    href: '#recent-updates',
-    linkLabel: 'Review repository update',
+    href: latestMarkdownHighlight.href,
+    linkLabel: latestMarkdownHighlight.href.startsWith('#') ? 'Review repository update' : 'Read official source',
   }
   : {
     eyebrow: 'Latest release highlight',
