@@ -111,7 +111,7 @@ test('built page prefixes public assets with the configured base path', async ()
   }
 });
 
-test('development grid asset uses the configured base path', { timeout: 10_000 }, async (context) => {
+test('development public assets use the configured base path', { timeout: 10_000 }, async (context) => {
   const existingOrigin = await getExistingDevOrigin();
   const port = existingOrigin ? null : await getAvailablePort();
   const child = existingOrigin ? null : await startDevServer(port);
@@ -136,6 +136,18 @@ test('development grid asset uses the configured base path', { timeout: 10_000 }
   const gridResponse = await fetch(`${origin}${gridReference}`);
   assert.equal(gridResponse.status, 200);
   assert.match(gridResponse.headers.get('content-type') ?? '', /^image\/svg\+xml/);
+
+  const faviconResponse = await fetch(`${origin}/Gareth/favicon.svg`);
+  assert.equal(faviconResponse.status, 200);
+  const faviconSource = await faviconResponse.text();
+  const nestedImageReference = faviconSource.match(/<image[\s\S]*?\bhref="([^"]+)"/)?.[1];
+  assert.equal(nestedImageReference, 'mona2.png');
+
+  const nestedImageUrl = new URL(nestedImageReference, faviconResponse.url);
+  assert.equal(nestedImageUrl.pathname, '/Gareth/mona2.png');
+  const nestedImageResponse = await fetch(nestedImageUrl);
+  assert.equal(nestedImageResponse.status, 200);
+  assert.match(nestedImageResponse.headers.get('content-type') ?? '', /^image\/png/);
 });
 
 test('fragment links stay in the current browser tab', async () => {
