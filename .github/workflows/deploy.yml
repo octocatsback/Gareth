@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# First-time production release: a repo admin must set Pages source to
+# GitHub Actions at https://github.com/octocatsback/Gareth/settings/pages
+# before this workflow can create a deployment.
 permissions:
   contents: read
   pages: write
@@ -18,10 +21,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - name: Checkout your repository using git
+        uses: actions/checkout@v7
 
-      - name: Install, build, and upload site
+      - name: Install, build, and upload your site
         uses: withastro/action@v6
         with:
           path: site
@@ -36,4 +39,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
