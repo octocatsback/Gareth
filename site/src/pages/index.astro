@@ -176,7 +176,7 @@ const latestOtherUpdates = latestContentUpdates.filter((update) =>
 );
 
 const latestMarkdownHighlight = latestBlogOrChangelogUpdates[0] ?? latestContentUpdates[0];
-const latestReleaseTitle = latestMarkdownHighlight?.title === latestMarkdownHighlight?.section
+const latestReleaseTitle = latestMarkdownHighlight && latestMarkdownHighlight.title === latestMarkdownHighlight.section
   ? latestMarkdownHighlight.summary
   : latestMarkdownHighlight?.title;
 
