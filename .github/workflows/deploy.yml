@@ -1,8 +1,20 @@
 name: Deploy to GitHub Pages
 
+# Production release: build Mona's Astro site and publish to GitHub Pages.
+# Prerequisite: Settings → Pages → Source = GitHub Actions.
+# Live URL: https://octocatsback.github.io/Gareth/
+
 on:
   push:
     branches: [main]
+    paths:
+      - "site/**"
+      - ".github/workflows/deploy.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "site/**"
+      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 permissions:
@@ -19,18 +31,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/checkout@v7
 
       - name: Install, build, and upload site
         uses: withastro/action@v6
         with:
           path: site
-          node-version: 22
+          node-version: "22"
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
@@ -39,4 +49,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
