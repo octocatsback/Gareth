@@ -1,7 +1,11 @@
 export function toPlainText(value) {
   return value
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/[`*_]/g, '')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/(^|[\s([{])__([^_\n]+)__(?=$|[\s)\]},.!?;:])/g, '$1$2')
+    .replace(/(^|[\s([{])\*([^*\n]+)\*(?=$|[\s)\]},.!?;:])/g, '$1$2')
+    .replace(/(^|[\s([{])_([^_\n]+)_(?=$|[\s)\]},.!?;:])/g, '$1$2')
     .trim();
 }
 
@@ -83,21 +87,33 @@ export function isTableLine(line) {
 export function getEntryContent(entryLines) {
   const paragraphs = [];
   const bullets = [];
+  let paragraphLines = [];
+
+  const flushParagraph = () => {
+    if (paragraphLines.length > 0) {
+      paragraphs.push(toPlainText(paragraphLines.join(' ')));
+      paragraphLines = [];
+    }
+  };
 
   for (const line of entryLines) {
     const trimmedLine = line.trim();
 
     if (!trimmedLine || isSourceLine(trimmedLine) || isTableLine(trimmedLine)) {
+      flushParagraph();
       continue;
     }
 
     if (trimmedLine.startsWith('- ')) {
+      flushParagraph();
       bullets.push(toPlainText(trimmedLine.replace(/^-\s+/, '')));
       continue;
     }
 
-    paragraphs.push(toPlainText(trimmedLine.replace(/^>\s*/, '')));
+    paragraphLines.push(trimmedLine.replace(/^>\s*/, ''));
   }
+
+  flushParagraph();
 
   return {
     paragraphs,
@@ -146,4 +162,18 @@ export function parseContentUpdates(markdown) {
     }))
     .filter((update) => update.summary && update.hasDetails)
     .map(({ hasDetails, ...update }) => update);
+}
+
+export function createLatestRelease(highlight) {
+  if (!highlight) {
+    return null;
+  }
+
+  return {
+    eyebrow: 'Latest repository highlight',
+    title: highlight.title,
+    date: highlight.date,
+    summary: highlight.summary,
+    href: highlight.href,
+  };
 }

@@ -4,7 +4,7 @@ import mona from '../../assets/mona.png';
 import copilot from '../../assets/copilot.png';
 import ducky from '../../assets/ducky.png';
 import githubInfoMarkdown from '../../content/github-info.md?raw';
-import { parseContentUpdates } from '../lib/github-info.js';
+import { createLatestRelease, parseContentUpdates } from '../lib/github-info.js';
 
 const contentUpdates = parseContentUpdates(githubInfoMarkdown);
 
@@ -21,15 +21,8 @@ const latestMarkdownHighlight = latestBlogOrChangelogUpdates.find(
   (update) => update.title !== 'Latest GitHub Updates'
 ) ?? latestContentUpdates.find((update) => update.title !== 'Latest GitHub Updates');
 
-const latestRelease = latestMarkdownHighlight
-  ? {
-    eyebrow: 'Latest repository highlight',
-    title: latestMarkdownHighlight.title,
-    date: latestMarkdownHighlight.date,
-    summary: latestMarkdownHighlight.summary,
-    href: '#recent-updates',
-  }
-  : {
+const latestRelease = createLatestRelease(latestMarkdownHighlight)
+  ?? {
     eyebrow: 'Latest release highlight',
     title: 'Secret scanning in AI coding agents via the GitHub MCP Server',
     date: 'GitHub Changelog · March 17, 2026',

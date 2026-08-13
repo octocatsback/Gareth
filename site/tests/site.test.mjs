@@ -6,7 +6,7 @@ import { createServer } from 'node:net';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { parseContentUpdates } from '../src/lib/github-info.js';
+import { createLatestRelease, parseContentUpdates, toPlainText } from '../src/lib/github-info.js';
 
 const siteRoot = fileURLToPath(new URL('..', import.meta.url));
 
@@ -63,6 +63,22 @@ async function startDevServer(port) {
   return child;
 }
 
+function contrastWithWhite([red, green, blue]) {
+  const linearize = (value) => {
+    const channel = value / 255;
+    return channel <= 0.04045
+      ? channel / 12.92
+      : ((channel + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = (
+    0.2126 * linearize(red)
+    + 0.7152 * linearize(green)
+    + 0.0722 * linearize(blue)
+  );
+
+  return 1.05 / (luminance + 0.05);
+}
+
 test('repository updates preserve source links and real dates', () => {
   const updates = parseContentUpdates(`
 # GitHub Info
@@ -71,7 +87,8 @@ test('repository updates preserve source links and real dates', () => {
 
 ### A linked update
 
-GitHub released an update for developers.
+GitHub released \`COPILOT_GITHUB_TOKEN\` for developers
+across a deliberately wrapped Markdown paragraph.
 
 - It includes a useful improvement.
 
@@ -88,13 +105,46 @@ This repository note has no publication date.
     date: 'April 2, 2026',
     section: 'Latest GitHub Updates',
     title: 'A linked update',
-    summary: 'GitHub released an update for developers.',
+    summary: 'GitHub released COPILOT_GITHUB_TOKEN for developers across a deliberately wrapped Markdown paragraph.',
     href: 'https://github.blog/changelog/example/',
     bullets: ['It includes a useful improvement.'],
     sourceLabel: 'GitHub Changelog · April 2, 2026',
   });
   assert.equal(updates[1].date, '');
   assert.equal(updates[1].href, '#content-sources');
+  assert.equal(
+    toPlainText('_Emphasis_ keeps `ANOTHER_IDENTIFIER` and DOUBLE__UNDERSCORES intact.'),
+    'Emphasis keeps ANOTHER_IDENTIFIER and DOUBLE__UNDERSCORES intact.',
+  );
+  assert.deepEqual(createLatestRelease(updates[0]), {
+    eyebrow: 'Latest repository highlight',
+    title: 'A linked update',
+    date: 'April 2, 2026',
+    summary: 'GitHub released COPILOT_GITHUB_TOKEN for developers across a deliberately wrapped Markdown paragraph.',
+    href: 'https://github.blog/changelog/example/',
+  });
+});
+
+test('primary button gradient meets WCAG AA text contrast', async () => {
+  const css = await readFile(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+  const parseColor = (variable) => {
+    const hex = css.match(new RegExp(`--${variable}:\\s*#([0-9a-f]{6})`, 'i'))?.[1];
+    assert.ok(hex, `Missing --${variable} color`);
+    return [0, 2, 4].map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16));
+  };
+  const start = parseColor('button-violet');
+  const end = parseColor('button-pink');
+
+  for (let step = 0; step <= 20; step += 1) {
+    const position = step / 20;
+    const color = start.map((channel, index) => (
+      Math.round(channel + ((end[index] - channel) * position))
+    ));
+    assert.ok(
+      contrastWithWhite(color) >= 4.5,
+      `Button gradient fails text contrast near ${Math.round(position * 100)}%`,
+    );
+  }
 });
 
 test('built page prefixes public assets with the configured base path', async () => {

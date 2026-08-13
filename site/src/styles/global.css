@@ -8,6 +8,8 @@
   --line: rgba(92, 103, 160, 0.16);
   --violet: #6b4dff;
   --pink: #ff5fb6;
+  --button-violet: #5233c2;
+  --button-pink: #a31562;
   --cyan: #43c8ff;
   --gold: #ffce5c;
   --shadow: 0 24px 80px rgba(45, 53, 110, 0.16);
@@ -154,7 +156,7 @@ a {
 
 .button--primary {
   color: white;
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--button-violet), var(--button-pink));
   box-shadow: 0 14px 28px rgba(107, 77, 255, 0.28);
 }
 
