@@ -133,7 +133,14 @@ const contentUpdates = getMarkdownSections(githubInfoMarkdown)
   .flatMap((section) => splitSectionEntries(section).map((entry) => {
     const { paragraphs, bullets, summary } = getEntryContent(entry.lines);
     const sourceLine = entry.lines.find((line) => isSourceLine(line.trim()));
-    const sourceLabel = sourceLine ? toPlainText(sourceLine.replace(/^\*?Source:\s*/i, '').replace(/^\*|\*$/g, '')) : '';
+    const sourceLabel = sourceLine
+      ? toPlainText(
+          sourceLine
+            .replace(/^>\s*/, '')
+            .replace(/^\*?Source:\s*/i, '')
+            .replace(/^\*|\*$/g, '')
+        )
+      : '';
     const postedDate = getPostedDate({ sourceLabel, summary });
 
     return {
@@ -349,8 +356,13 @@ const highlights = [
         <h2>{latestRelease.title}</h2>
         <p class="release-spotlight__meta">{latestRelease.date}</p>
         <p>{latestRelease.summary}</p>
-        <a class="button button--primary" href={latestRelease.href} target="_blank" rel="noreferrer">
-          Open changelog item
+        <a
+          class="button button--primary"
+          href={latestRelease.href}
+          target={latestRelease.href.startsWith('#') ? undefined : '_blank'}
+          rel={latestRelease.href.startsWith('#') ? undefined : 'noreferrer'}
+        >
+          {latestRelease.href.startsWith('#') ? 'See recent updates' : 'Open changelog item'}
         </a>
       </div>
       <div class="release-spotlight__media">
