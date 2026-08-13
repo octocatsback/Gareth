@@ -13,7 +13,7 @@ The workflow uses `safe-outputs: create-pull-request`, so the agent can draft we
 ### :keyboard: Activity: Run the updater and inspect its pull request
 
 > [!IMPORTANT]
-> Make sure you are still using branch `create-mona-updater` from Step 2. If you switched branches, return to `create-mona-updater` before continuing.
+> Start this step from the latest `main`, then create and switch to a new branch named `update-mona-updater`.
 
 1. Confirm the repository still has the `COPILOT_GITHUB_TOKEN` Actions secret from Step 1.
 
@@ -28,8 +28,8 @@ The workflow uses `safe-outputs: create-pull-request`, so the agent can draft we
    > ```prompt
    > - Update .github/workflows/update-github-info.md workflow
    > - Tell agent to:
-   >      web fetch https://awesome-copilot.github.com/workflows/
-   > - Add to sources awesome-copilot workflows https://awesome-copilot.github.com/workflows/
+   >      web fetch https://github.com/github/awesome-copilot/tree/main/workflows
+   > - Add to sources awesome-copilot workflows https://github.com/github/awesome-copilot/tree/main/workflows
    > ```
 
 3. Compile the agentic workflow file `.github/workflows/update-github-info.md` in the ![Static Badge](https://img.shields.io/badge/Terminal-text?logo=gnometerminal&labelColor=0969da&color=ddf4ff) **terminal window**.
@@ -48,7 +48,7 @@ The workflow uses `safe-outputs: create-pull-request`, so the agent can draft we
    >
    > ```prompt
    > - Commit the website content and Agentic Workflow changes.
-   > - Push to the `create-mona-updater` branch
+   > - Push to the `update-mona-updater` branch
    > - Open a pull request into main.
    > - Use the pull request title "Update Mona website updater workflow".
    > ```

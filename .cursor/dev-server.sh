@@ -14,5 +14,5 @@ if [[ ! -d node_modules ]]; then
 fi
 
 export ASTRO_TELEMETRY_DISABLED=1
-echo "[dev-server] Starting Mona Astro site from ${SITE_DIR} on 0.0.0.0:4321"
+echo "[dev-server] Starting Mona Astro site from ${SITE_DIR} at http://localhost:4321/Gareth/"
 exec npm run dev -- --host 0.0.0.0 --port 4321

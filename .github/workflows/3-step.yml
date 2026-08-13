@@ -63,7 +63,7 @@ jobs:
         uses: skills/action-keyphrase-checker@v2
         with:
           text-file: .github/workflows/update-github-info.md
-          keyphrase: "awesome-copilot.github.com"
+          keyphrase: "github.com/github/awesome-copilot"
           case-sensitive: false
 
       - name: Check compiled workflow exists

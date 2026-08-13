@@ -9,7 +9,7 @@
       "preLaunchTask": "site: install",
       "serverReadyAction": {
         "pattern": "Local\\s+http://localhost:4321/|Local\\s+http://127\\.0\\.0\\.1:4321/",
-        "uriFormat": "http://localhost:4321/",
+        "uriFormat": "http://localhost:4321/Gareth/",
         "action": "openExternally"
       }
     }

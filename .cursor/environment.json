@@ -14,7 +14,7 @@
   "terminals": [
     {
       "name": "Mona Astro",
-      "description": "Astro dev server for Mona's GitHub Info site at http://localhost:4321",
+      "description": "Astro dev server for Mona's GitHub Info site at http://localhost:4321/Gareth/",
       "command": "if [ -f .cursor/dev-server.sh ]; then bash .cursor/dev-server.sh; elif [ -f Gareth/.cursor/dev-server.sh ]; then bash Gareth/.cursor/dev-server.sh; elif [ -f repos/Gareth/.cursor/dev-server.sh ]; then bash repos/Gareth/.cursor/dev-server.sh; elif [ -f /agent/repos/Gareth/.cursor/dev-server.sh ]; then bash /agent/repos/Gareth/.cursor/dev-server.sh; else echo 'Gareth .cursor/dev-server.sh not found' >&2; exit 1; fi"
     }
   ],
