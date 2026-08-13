@@ -265,6 +265,8 @@ const sourceGroups = [
   },
 ];
 
+const latestReleaseIsExternal = !latestRelease.href.startsWith('#');
+
 const highlights = [
   {
     title: 'Newest signals first',
@@ -349,8 +351,13 @@ const highlights = [
         <h2>{latestRelease.title}</h2>
         <p class="release-spotlight__meta">{latestRelease.date}</p>
         <p>{latestRelease.summary}</p>
-        <a class="button button--primary" href={latestRelease.href} target="_blank" rel="noreferrer">
-          Open changelog item
+        <a
+          class="button button--primary"
+          href={latestRelease.href}
+          target={latestReleaseIsExternal ? '_blank' : undefined}
+          rel={latestReleaseIsExternal ? 'noreferrer' : undefined}
+        >
+          {latestReleaseIsExternal ? 'Open changelog item' : 'Review repository content'}
         </a>
       </div>
       <div class="release-spotlight__media">
