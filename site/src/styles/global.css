@@ -201,12 +201,16 @@ a {
 
 .hero__visual {
   position: relative;
-  min-height: 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
 }
 
 .hero-card {
-  position: absolute;
-  width: clamp(180px, 26vw, 260px);
+  position: relative;
+  z-index: 1;
+  width: auto;
   padding: 18px;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.78);
@@ -231,19 +235,10 @@ a {
   font-size: 0.95rem;
 }
 
-.hero-card--mona {
-  top: 10px;
-  left: 18px;
-}
-
-.hero-card--copilot {
-  top: 150px;
-  right: 0;
-}
-
 .hero-card--ducky {
-  bottom: 12px;
-  left: 90px;
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc(50% - 9px);
 }
 
 .orb {
@@ -399,20 +394,12 @@ a {
   }
 
   .hero__visual {
-    min-height: 720px;
-  }
-
-  .hero-card--mona {
-    left: 0;
-  }
-
-  .hero-card--copilot {
-    top: 210px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .hero-card--ducky {
-    left: 40px;
-    bottom: 0;
+    grid-column: auto;
+    width: auto;
   }
 }
 
@@ -430,24 +417,13 @@ a {
   }
 
   .hero__visual {
-    min-height: 630px;
+    grid-template-columns: 1fr;
+    width: min(100%, 360px);
+    margin: 0 auto;
   }
 
   .hero-card {
-    width: min(100%, 230px);
-  }
-
-  .hero-card--mona {
-    top: 0;
-  }
-
-  .hero-card--copilot {
-    top: 190px;
-  }
-
-  .hero-card--ducky {
-    top: 380px;
-    left: 0;
+    width: 100%;
   }
 
   .mini-stats {
