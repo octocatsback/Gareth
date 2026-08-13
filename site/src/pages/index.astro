@@ -349,8 +349,13 @@ const highlights = [
         <h2>{latestRelease.title}</h2>
         <p class="release-spotlight__meta">{latestRelease.date}</p>
         <p>{latestRelease.summary}</p>
-        <a class="button button--primary" href={latestRelease.href} target="_blank" rel="noreferrer">
-          Open changelog item
+        <a
+          class="button button--primary"
+          href={latestRelease.href}
+          target={latestRelease.href.startsWith('#') ? undefined : '_blank'}
+          rel={latestRelease.href.startsWith('#') ? undefined : 'noreferrer'}
+        >
+          {latestRelease.href.startsWith('#') ? 'Review repository content' : 'Open changelog item'}
         </a>
       </div>
       <div class="release-spotlight__media">
