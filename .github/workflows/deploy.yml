@@ -23,6 +23,10 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # Turn Pages on (build_type: workflow) when the repository has never had it
+          # enabled; without this the job fails with "Get Pages site failed".
+          enablement: true
 
       - name: Install, build, and upload site
         uses: withastro/action@v6
