@@ -11,15 +11,13 @@ const {
   description = 'A bright Astro website that highlights GitHub docs, blog stories, and changelog updates.',
 } = Astro.props;
 
-// Files in public/ are served under the configured `base`, so build their URLs
-// from BASE_URL instead of hard-coding root-relative paths.
-const withBase = (path) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path}`;
-const faviconHref = withBase('favicon.svg');
-const gridGraphicHref = withBase('graphics/grid.svg');
+// Astro rewrites `base` into bundled asset URLs, but not into raw href strings,
+// so public/ paths in markup have to be built from BASE_URL by hand.
+const faviconHref = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`;
 ---
 
 <!doctype html>
-<html lang="en" style={`--grid-graphic: url('${gridGraphicHref}')`}>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
