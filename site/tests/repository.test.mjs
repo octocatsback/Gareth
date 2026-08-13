@@ -19,7 +19,8 @@ test('development and exercise guidance point to working targets', async () => {
     new URL('../../.github/steps/2-step.md', import.meta.url),
     'utf8',
   );
-  const workflowSampleMatch = stepTwoGuide.match(/```markdown\n([\s\S]*?)\n\s*```/);
+  const workflowSampleMatch = [...stepTwoGuide.matchAll(/```markdown\n([\s\S]*?)\n\s*```/g)]
+    .find((match) => match[1].includes('name: update-github-info'));
   assert.ok(workflowSampleMatch, 'Missing Step 2 workflow sample');
   const workflowSample = workflowSampleMatch[1]
     .split('\n')
