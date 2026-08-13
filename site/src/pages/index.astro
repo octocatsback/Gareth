@@ -96,7 +96,21 @@ function splitSectionEntries(section) {
 
 function isSourceLine(line) {
   const normalized = line.replace(/^>\s*/, '').trim();
-  return /^\*?source:/i.test(normalized);
+  return /^\*{0,2}source:\*{0,2}/i.test(normalized);
+}
+
+function getSourceDetails(line) {
+  const normalized = line.replace(/^>\s*/, '').trim();
+  const sourceValue = normalized
+    .replace(/^\*{0,2}source:\*{0,2}\s*/i, '')
+    .replace(/^\*|\*$/g, '')
+    .trim();
+  const markdownLink = sourceValue.match(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/i);
+
+  return {
+    label: toPlainText(sourceValue),
+    href: markdownLink?.[2] ?? '',
+  };
 }
 
 function isTableLine(line) {
@@ -133,8 +147,8 @@ const contentUpdates = getMarkdownSections(githubInfoMarkdown)
   .flatMap((section) => splitSectionEntries(section).map((entry) => {
     const { paragraphs, bullets, summary } = getEntryContent(entry.lines);
     const sourceLine = entry.lines.find((line) => isSourceLine(line.trim()));
-    const sourceLabel = sourceLine ? toPlainText(sourceLine.replace(/^\*?Source:\s*/i, '').replace(/^\*|\*$/g, '')) : '';
-    const postedDate = getPostedDate({ sourceLabel, summary });
+    const source = sourceLine ? getSourceDetails(sourceLine) : { label: '', href: '' };
+    const postedDate = getPostedDate({ sourceLabel: source.label, summary });
 
     return {
       type: 'From github-info.md',
@@ -142,9 +156,10 @@ const contentUpdates = getMarkdownSections(githubInfoMarkdown)
       section: section.title,
       title: entry.title,
       summary,
-      href: '#content-sources',
+      href: source.href || '#content-sources',
       bullets,
-      sourceLabel,
+      sourceLabel: source.label,
+      sourceHref: source.href,
       hasDetails: paragraphs.length > 0 || bullets.length > 0,
     };
   }))
@@ -160,9 +175,7 @@ const latestOtherUpdates = latestContentUpdates.filter((update) =>
   !/github\s+(blog|changelog)/i.test(update.sourceLabel)
 );
 
-const latestMarkdownHighlight = latestBlogOrChangelogUpdates.find(
-  (update) => update.title !== 'Latest GitHub Updates'
-) ?? latestContentUpdates.find((update) => update.title !== 'Latest GitHub Updates');
+const latestMarkdownHighlight = latestBlogOrChangelogUpdates[0] ?? latestContentUpdates[0];
 
 const latestRelease = latestMarkdownHighlight
   ? {
@@ -170,7 +183,7 @@ const latestRelease = latestMarkdownHighlight
     title: latestMarkdownHighlight.title,
     date: latestMarkdownHighlight.date,
     summary: latestMarkdownHighlight.summary,
-    href: '#recent-updates',
+    href: latestMarkdownHighlight.href,
   }
   : {
     eyebrow: 'Latest release highlight',
@@ -180,6 +193,8 @@ const latestRelease = latestMarkdownHighlight
       'GitHub now supports secret scanning in AI coding agents through the GitHub MCP Server, helping teams catch exposed credentials and sensitive data earlier in automated coding flows.',
     href: 'https://github.blog/changelog/2026-03-17-secret-scanning-in-ai-coding-agents-via-the-github-mcp-server/',
   };
+
+const latestReleaseIsExternal = !latestRelease.href.startsWith('#');
 
 const recentUpdates = [
   {
@@ -349,8 +364,13 @@ const highlights = [
         <h2>{latestRelease.title}</h2>
         <p class="release-spotlight__meta">{latestRelease.date}</p>
         <p>{latestRelease.summary}</p>
-        <a class="button button--primary" href={latestRelease.href} target="_blank" rel="noreferrer">
-          Open changelog item
+        <a
+          class="button button--primary"
+          href={latestRelease.href}
+          target={latestReleaseIsExternal ? '_blank' : undefined}
+          rel={latestReleaseIsExternal ? 'noreferrer' : undefined}
+        >
+          {latestReleaseIsExternal ? 'Read official source' : 'Review repository content'}
         </a>
       </div>
       <div class="release-spotlight__media">
@@ -377,6 +397,16 @@ const highlights = [
             <p class="update-card__date">{update.date}</p>
             <h3>{update.title}</h3>
             <p>{update.summary}</p>
+            {update.sourceLabel && (
+              <p class="update-card__source">
+                <span>Source: </span>
+                {update.sourceHref ? (
+                  <a href={update.sourceHref} target="_blank" rel="noreferrer">{update.sourceLabel}</a>
+                ) : (
+                  update.sourceLabel
+                )}
+              </p>
+            )}
             {update.bullets?.length > 0 && (
               <ul>
                 {update.bullets.map((bullet) => (
