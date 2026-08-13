@@ -171,6 +171,7 @@ const latestRelease = latestMarkdownHighlight
     date: latestMarkdownHighlight.date,
     summary: latestMarkdownHighlight.summary,
     href: '#recent-updates',
+    linkLabel: 'Review repository update',
   }
   : {
     eyebrow: 'Latest release highlight',
@@ -179,7 +180,10 @@ const latestRelease = latestMarkdownHighlight
     summary:
       'GitHub now supports secret scanning in AI coding agents through the GitHub MCP Server, helping teams catch exposed credentials and sensitive data earlier in automated coding flows.',
     href: 'https://github.blog/changelog/2026-03-17-secret-scanning-in-ai-coding-agents-via-the-github-mcp-server/',
+    linkLabel: 'Open changelog item',
   };
+
+const latestReleaseIsExternal = !latestRelease.href.startsWith('#');
 
 const recentUpdates = [
   {
@@ -349,8 +353,13 @@ const highlights = [
         <h2>{latestRelease.title}</h2>
         <p class="release-spotlight__meta">{latestRelease.date}</p>
         <p>{latestRelease.summary}</p>
-        <a class="button button--primary" href={latestRelease.href} target="_blank" rel="noreferrer">
-          Open changelog item
+        <a
+          class="button button--primary"
+          href={latestRelease.href}
+          target={latestReleaseIsExternal ? '_blank' : undefined}
+          rel={latestReleaseIsExternal ? 'noreferrer' : undefined}
+        >
+          {latestRelease.linkLabel}
         </a>
       </div>
       <div class="release-spotlight__media">
