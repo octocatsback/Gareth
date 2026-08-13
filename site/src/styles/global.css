@@ -422,16 +422,13 @@ a {
 
   .hero__visual {
     grid-template-columns: 1fr;
-    justify-items: center;
   }
 
-  .hero-card,
   .hero-card--mona,
   .hero-card--copilot,
   .hero-card--ducky {
     justify-self: center;
     margin-top: 0;
-    max-width: 320px;
   }
 
   .mini-stats {
