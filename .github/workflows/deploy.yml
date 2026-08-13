@@ -21,11 +21,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
       - name: Install, build, and upload site
         uses: withastro/action@v6
         with:
@@ -39,6 +34,22 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # Pages cannot be turned on from a workflow: GITHUB_TOKEN is not allowed to
+      # create the Pages site. Check first so a missing repository setting reads as
+      # an actionable warning rather than a 404 from the deploy step.
+      - name: Check whether Pages is enabled
+        id: pages-status
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/${GITHUB_REPOSITORY}/pages" --silent 2>/dev/null; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=GitHub Pages is not enabled::The site built successfully and was uploaded as an artifact, but it cannot be published yet. Enable Pages under Settings > Pages and set 'Source' to 'GitHub Actions', then re-run this workflow."
+          fi
+
       - name: Deploy to GitHub Pages
         id: deployment
+        if: steps.pages-status.outputs.enabled == 'true'
         uses: actions/deploy-pages@v4
