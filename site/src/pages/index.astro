@@ -5,12 +5,6 @@ import copilot from '../../assets/copilot.png';
 import ducky from '../../assets/ducky.png';
 import githubInfoMarkdown from '../../content/github-info.md?raw';
 
-const publishedDateLabel = new Intl.DateTimeFormat('en-US', {
-  month: 'long',
-  day: 'numeric',
-  year: 'numeric',
-}).format(new Date());
-
 function toPlainText(value) {
   return value
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
@@ -37,7 +31,7 @@ function getPostedDate({ sourceLabel, summary }) {
     return summaryDate;
   }
 
-  return publishedDateLabel;
+  return 'Repository content';
 }
 
 function getMarkdownSections(markdown) {
@@ -96,7 +90,12 @@ function splitSectionEntries(section) {
 
 function isSourceLine(line) {
   const normalized = line.replace(/^>\s*/, '').trim();
-  return /^\*?source:/i.test(normalized);
+  return /^\*{0,2}source:\*{0,2}/i.test(normalized);
+}
+
+function getSourceLabel(line) {
+  const normalized = line.replace(/^>\s*/, '').trim();
+  return toPlainText(normalized.replace(/^\*{0,2}source:\*{0,2}\s*/i, ''));
 }
 
 function isTableLine(line) {
@@ -133,7 +132,7 @@ const contentUpdates = getMarkdownSections(githubInfoMarkdown)
   .flatMap((section) => splitSectionEntries(section).map((entry) => {
     const { paragraphs, bullets, summary } = getEntryContent(entry.lines);
     const sourceLine = entry.lines.find((line) => isSourceLine(line.trim()));
-    const sourceLabel = sourceLine ? toPlainText(sourceLine.replace(/^\*?Source:\s*/i, '').replace(/^\*|\*$/g, '')) : '';
+    const sourceLabel = sourceLine ? getSourceLabel(sourceLine) : '';
     const postedDate = getPostedDate({ sourceLabel, summary });
 
     return {
@@ -171,6 +170,7 @@ const latestRelease = latestMarkdownHighlight
     date: latestMarkdownHighlight.date,
     summary: latestMarkdownHighlight.summary,
     href: '#recent-updates',
+    linkLabel: 'Review repository update',
   }
   : {
     eyebrow: 'Latest release highlight',
@@ -179,6 +179,7 @@ const latestRelease = latestMarkdownHighlight
     summary:
       'GitHub now supports secret scanning in AI coding agents through the GitHub MCP Server, helping teams catch exposed credentials and sensitive data earlier in automated coding flows.',
     href: 'https://github.blog/changelog/2026-03-17-secret-scanning-in-ai-coding-agents-via-the-github-mcp-server/',
+    linkLabel: 'Open changelog item',
   };
 
 const recentUpdates = [
@@ -349,8 +350,13 @@ const highlights = [
         <h2>{latestRelease.title}</h2>
         <p class="release-spotlight__meta">{latestRelease.date}</p>
         <p>{latestRelease.summary}</p>
-        <a class="button button--primary" href={latestRelease.href} target="_blank" rel="noreferrer">
-          Open changelog item
+        <a
+          class="button button--primary"
+          href={latestRelease.href}
+          target={latestRelease.href.startsWith('#') ? undefined : '_blank'}
+          rel={latestRelease.href.startsWith('#') ? undefined : 'noreferrer'}
+        >
+          {latestRelease.linkLabel}
         </a>
       </div>
       <div class="release-spotlight__media">
