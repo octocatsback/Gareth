@@ -23,6 +23,9 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # First deploy 404s unless Pages exists and is set to GitHub Actions.
+          enablement: true
 
       - name: Install, build, and upload site
         uses: withastro/action@v6
@@ -39,4 +42,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

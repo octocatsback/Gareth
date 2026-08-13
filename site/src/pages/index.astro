@@ -5,17 +5,25 @@ import copilot from '../../assets/copilot.png';
 import ducky from '../../assets/ducky.png';
 import githubInfoMarkdown from '../../content/github-info.md?raw';
 
-const publishedDateLabel = new Intl.DateTimeFormat('en-US', {
-  month: 'long',
-  day: 'numeric',
-  year: 'numeric',
-}).format(new Date());
-
 function toPlainText(value) {
   return value
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/[`*_]/g, '')
     .trim();
+}
+
+function extractUrl(value) {
+  const markdownLink = value.match(/\[[^\]]+\]\((https?:\/\/[^)\s]+)\)/);
+  if (markdownLink) {
+    return markdownLink[1];
+  }
+
+  const raw = value.match(/https?:\/\/[^\s)]+/);
+  return raw ? raw[0] : '';
+}
+
+function isExternalHref(href) {
+  return /^https?:\/\//i.test(href || '');
 }
 
 function extractDateFromText(value) {
@@ -37,7 +45,7 @@ function getPostedDate({ sourceLabel, summary }) {
     return summaryDate;
   }
 
-  return publishedDateLabel;
+  return '';
 }
 
 function getMarkdownSections(markdown) {
@@ -95,8 +103,19 @@ function splitSectionEntries(section) {
 }
 
 function isSourceLine(line) {
-  const normalized = line.replace(/^>\s*/, '').trim();
-  return /^\*?source:/i.test(normalized);
+  const normalized = line.replace(/^>\s*/, '').replace(/^\*+\s*/, '').trim();
+  return /^source:/i.test(normalized);
+}
+
+function getSourceLabel(line) {
+  return toPlainText(
+    line
+      .replace(/^>\s*/, '')
+      .trim()
+      .replace(/^\*+\s*/, '')
+      .replace(/^Source:\s*/i, '')
+      .replace(/\*+$/, '')
+  );
 }
 
 function isTableLine(line) {
@@ -132,9 +151,10 @@ function getEntryContent(entryLines) {
 const contentUpdates = getMarkdownSections(githubInfoMarkdown)
   .flatMap((section) => splitSectionEntries(section).map((entry) => {
     const { paragraphs, bullets, summary } = getEntryContent(entry.lines);
-    const sourceLine = entry.lines.find((line) => isSourceLine(line.trim()));
-    const sourceLabel = sourceLine ? toPlainText(sourceLine.replace(/^\*?Source:\s*/i, '').replace(/^\*|\*$/g, '')) : '';
+    const sourceLine = entry.lines.find((line) => isSourceLine(line.trim())) || '';
+    const sourceLabel = sourceLine ? getSourceLabel(sourceLine) : '';
     const postedDate = getPostedDate({ sourceLabel, summary });
+    const sourceHref = sourceLine ? extractUrl(sourceLine) : '';
 
     return {
       type: 'From github-info.md',
@@ -142,7 +162,7 @@ const contentUpdates = getMarkdownSections(githubInfoMarkdown)
       section: section.title,
       title: entry.title,
       summary,
-      href: '#content-sources',
+      href: sourceHref || '#content-sources',
       bullets,
       sourceLabel,
       hasDetails: paragraphs.length > 0 || bullets.length > 0,
@@ -170,7 +190,7 @@ const latestRelease = latestMarkdownHighlight
     title: latestMarkdownHighlight.title,
     date: latestMarkdownHighlight.date,
     summary: latestMarkdownHighlight.summary,
-    href: '#recent-updates',
+    href: latestMarkdownHighlight.href,
   }
   : {
     eyebrow: 'Latest release highlight',
@@ -180,6 +200,13 @@ const latestRelease = latestMarkdownHighlight
       'GitHub now supports secret scanning in AI coding agents through the GitHub MCP Server, helping teams catch exposed credentials and sensitive data earlier in automated coding flows.',
     href: 'https://github.blog/changelog/2026-03-17-secret-scanning-in-ai-coding-agents-via-the-github-mcp-server/',
   };
+
+const latestReleaseIsExternal = isExternalHref(latestRelease.href);
+const latestReleaseCta = latestReleaseIsExternal
+  ? /changelog/i.test(latestRelease.href)
+    ? 'Open changelog item'
+    : 'Read official source'
+  : 'See this update';
 
 const recentUpdates = [
   {
@@ -347,10 +374,15 @@ const highlights = [
       <div class="release-spotlight__copy">
         <span class="eyebrow">{latestRelease.eyebrow}</span>
         <h2>{latestRelease.title}</h2>
-        <p class="release-spotlight__meta">{latestRelease.date}</p>
+        {latestRelease.date && <p class="release-spotlight__meta">{latestRelease.date}</p>}
         <p>{latestRelease.summary}</p>
-        <a class="button button--primary" href={latestRelease.href} target="_blank" rel="noreferrer">
-          Open changelog item
+        <a
+          class="button button--primary"
+          href={latestRelease.href}
+          target={latestReleaseIsExternal ? '_blank' : undefined}
+          rel={latestReleaseIsExternal ? 'noreferrer' : undefined}
+        >
+          {latestReleaseCta}
         </a>
       </div>
       <div class="release-spotlight__media">
@@ -374,7 +406,7 @@ const highlights = [
             <span class:list={["pill", update.type === 'GitHub Changelog' ? 'pill--gold' : 'pill--violet']}>
               {update.type}
             </span>
-            <p class="update-card__date">{update.date}</p>
+            {update.date && <p class="update-card__date">{update.date}</p>}
             <h3>{update.title}</h3>
             <p>{update.summary}</p>
             {update.bullets?.length > 0 && (
