@@ -6,6 +6,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib.sh"
 
 SITE_DIR="$(find_gareth_site)"
+echo "[install] Checking that secret-like files are not tracked..."
+if git ls-files | grep -E '(^|/)\.env$|(^|/)\.env\.[^/]+$|\.pem$|(^|/)id_rsa$|(^|/)id_ed25519$|(^|/)id_ecdsa$'; then
+  echo "[install] error: refusing to continue; secret-like files are tracked in git" >&2
+  exit 1
+fi
 echo "[install] Installing Mona Astro site dependencies in ${SITE_DIR}"
 npm ci --prefix "${SITE_DIR}"
 
