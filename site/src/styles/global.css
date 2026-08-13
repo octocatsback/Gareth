@@ -201,12 +201,16 @@ a {
 
 .hero__visual {
   position: relative;
-  min-height: 560px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 18px;
 }
 
 .hero-card {
-  position: absolute;
-  width: clamp(180px, 26vw, 260px);
+  position: relative;
+  width: 100%;
+  max-width: 260px;
   padding: 18px;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.78);
@@ -216,7 +220,8 @@ a {
 }
 
 .hero-card img {
-  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: clamp(96px, 11vw, 140px);
   object-fit: contain;
 }
 
@@ -232,18 +237,17 @@ a {
 }
 
 .hero-card--mona {
-  top: 10px;
-  left: 18px;
+  justify-self: start;
 }
 
 .hero-card--copilot {
-  top: 150px;
-  right: 0;
+  justify-self: end;
+  margin-top: 42px;
 }
 
 .hero-card--ducky {
-  bottom: 12px;
-  left: 90px;
+  grid-column: 1 / -1;
+  justify-self: center;
 }
 
 .orb {
@@ -398,21 +402,8 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .hero__visual {
-    min-height: 720px;
-  }
-
-  .hero-card--mona {
-    left: 0;
-  }
-
-  .hero-card--copilot {
-    top: 210px;
-  }
-
-  .hero-card--ducky {
-    left: 40px;
-    bottom: 0;
+  .hero-card {
+    max-width: 300px;
   }
 }
 
@@ -430,24 +421,17 @@ a {
   }
 
   .hero__visual {
-    min-height: 630px;
+    grid-template-columns: 1fr;
+    justify-items: center;
   }
 
-  .hero-card {
-    width: min(100%, 230px);
-  }
-
-  .hero-card--mona {
-    top: 0;
-  }
-
-  .hero-card--copilot {
-    top: 190px;
-  }
-
+  .hero-card,
+  .hero-card--mona,
+  .hero-card--copilot,
   .hero-card--ducky {
-    top: 380px;
-    left: 0;
+    justify-self: center;
+    margin-top: 0;
+    max-width: 320px;
   }
 
   .mini-stats {
