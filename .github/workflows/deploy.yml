@@ -1,5 +1,9 @@
 name: Deploy to GitHub Pages
 
+# One-time repo setting required before this workflow can succeed:
+# Settings > Pages > Build and deployment > Source = "GitHub Actions".
+# Without it, the "Setup Pages" step fails with "Get Pages site failed"
+# even though the site build itself is fine.
 on:
   push:
     branches: [main]
