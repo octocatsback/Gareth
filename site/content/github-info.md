@@ -1,8 +1,8 @@
 # GitHub Info
 
-## Mona's editorial angle
+## My editorial angle
 
-Mona's website focuses on practical GitHub guidance backed by official references from:
+I focus my website on practical GitHub guidance backed by official references from:
 
 - docs.github.com
 - github.blog
