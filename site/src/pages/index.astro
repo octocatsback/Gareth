@@ -89,6 +89,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   const DEFAULT_TOPIC = 'Hello, world';
   const DEFAULT_ARCHETYPE: ArchetypeKey = 'creator';
 
+  function isHelloWorld(topic: string) {
+    return /^hello,?\s*world\.?$/i.test(topic.trim());
+  }
+
   const voices: Record<ArchetypeKey, (topic: string, take: number) => VoiceDraft> = {
     creator: (topic, take) => ({
       icon: '✨',
@@ -97,7 +101,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         : `${topic}. I make the first commit.`,
       body: take
         ? `Hello, world. I'm Octocat. This is another take, not a rewrite of someone else's copy. I keep ${topic} in my hands and shape it until it can stand on its own.`
-        : `Hello, world. I'm Octocat. I do not wait for a perfect introduction. I open the repository, leave a trail anyone can follow, and let ${topic} speak in my own voice.`,
+        : isHelloWorld(topic)
+          ? "Hello, world. I'm Octocat. I do not wait for a perfect introduction. I open the repository, leave a trail anyone can follow, and let the work speak in my own voice."
+          : `Hello, world. I'm Octocat. I do not wait for a perfect introduction. I open the repository, leave a trail anyone can follow, and let ${topic} speak in my own voice.`,
       pillars: [
         { name: 'Build in public', desc: 'I show the draft, not just the polished release.' },
         { name: 'Leave a trail', desc: 'I write so the next person can pick up my thread.' },
