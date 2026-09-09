@@ -17,6 +17,7 @@
 body{font-family:var(--font-sans);color:var(--color-text-primary);padding:1.5rem 1rem 3rem}
 h1{font-size:22px;font-weight:500;margin-bottom:4px}
 .sub{font-size:14px;color:var(--color-text-secondary);margin-bottom:1.5rem}
+.speakers{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
 .input-row{display:flex;gap:8px;margin-bottom:1.5rem}
 .input-row input{flex:1;padding:10px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-size:15px;outline:none}
 .input-row input:focus{border-color:var(--color-border-primary)}

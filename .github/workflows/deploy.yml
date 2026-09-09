@@ -23,6 +23,14 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # Best-effort auto-enable. Note: this requires the token used here
+          # to have repo admin rights (a PAT with the `repo` scope, or a
+          # GitHub App token with `administration:write`); the default
+          # `GITHUB_TOKEN` cannot enable Pages on its own. If this step still
+          # fails with "Get Pages site failed", enable Pages once manually in
+          # Settings > Pages > Build and deployment > Source: GitHub Actions.
+          enablement: true
 
       - name: Install, build, and upload site
         uses: withastro/action@v6
