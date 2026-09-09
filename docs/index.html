@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello, world — I'm Octocat</title>
-    <meta name="description" content="A first-person Hello World draft in Octocat's voice." />
+    <title>Hello, world — I'm Octocat, and I'm the account manager</title>
+    <meta name="description" content="First-person Hello World drafts from Octocat and the account manager, including the true publish status." />
     <style>
       :root {
         color-scheme: light;
@@ -24,6 +24,7 @@
       body{font-family:var(--font-sans);color:var(--color-text-primary);padding:1.5rem 1rem 3rem}
       h1{font-size:22px;font-weight:500;margin-bottom:4px}
       .sub{font-size:14px;color:var(--color-text-secondary);margin-bottom:1.5rem}
+      .speakers{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
       .input-row{display:flex;gap:8px;margin-bottom:1.5rem}
       .input-row input{flex:1;padding:10px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-size:15px;outline:none}
       .input-row input:focus{border-color:var(--color-border-primary)}
@@ -56,7 +57,18 @@
   <body>
     <main class="page">
       <h1>Hello, world</h1>
-      <p class="sub">I'm Octocat. This is my first-person draft — I am speaking for myself.</p>
+      <p class="sub">I'm Octocat. I'm the account manager. We both speak in first person, and we will not dress up a 404.</p>
+
+      <article class="card">
+        <p class="card-label">The truth</p>
+        <h3>Pages is off. The draft is public as a file.</h3>
+        <p>GitHub Pages is not enabled, so https://octocatsback.github.io/Gareth/ still 404s. I cannot turn Pages on from this environment. What is published: the first-person Octocat page, the lock-down merge, and this account-manager voice. What is not published: a live github.io site. Lock-down's GitHub Info homepage was not mixed into this one.</p>
+      </article>
+
+      <div class="speakers" role="tablist" aria-label="Who is speaking">
+        <button type="button" class="arch-btn active" data-speaker="octocat">Octocat</button>
+        <button type="button" class="arch-btn" data-speaker="account-manager">Account manager</button>
+      </div>
 
       <div class="input-row">
         <input id="topic-input" type="text" value="Hello, world" placeholder="What should I talk about?" autocomplete="off" />
@@ -109,15 +121,18 @@
     <script>
       const DEFAULT_TOPIC = 'Hello, world';
       const DEFAULT_ARCHETYPE = 'creator';
+      const DEFAULT_SPEAKER = 'octocat';
 
       function isHelloWorld(topic) {
         return /^hello,?\s*world\.?$/i.test(topic.trim());
       }
 
-      const voices = {
+      const octocatVoices = {
         creator: (topic, take) => ({
           icon: '✨',
-          title: take ? `I start again, still making ${topic}.` : `${topic}. I make the first commit.`,
+          title: take
+            ? `I start again, still making ${topic}.`
+            : `${topic}. I make the first commit.`,
           body: take
             ? `Hello, world. I'm Octocat. This is another take, not a rewrite of someone else's copy. I keep ${topic} in my hands and shape it until it can stand on its own.`
             : isHelloWorld(topic)
@@ -133,7 +148,9 @@
         }),
         sage: (topic, take) => ({
           icon: '📜',
-          title: take ? `I reread ${topic} until the lesson is clear.` : `${topic}. I keep the map.`,
+          title: take
+            ? `I reread ${topic} until the lesson is clear.`
+            : `${topic}. I keep the map.`,
           body: take
             ? `Hello, world. I'm Octocat. Let me say this more slowly: ${topic} is how I teach. I do not rush the explanation. I name what I know, and I leave the rest as an open question.`
             : `Hello, world. I'm Octocat. I remember the paths other people forget. I use ${topic} to show how we work together, not to impress you with how much I have read.`,
@@ -147,7 +164,9 @@
         }),
         explorer: (topic, take) => ({
           icon: '🧭',
-          title: take ? `I take another path through ${topic}.` : `${topic}. I go first.`,
+          title: take
+            ? `I take another path through ${topic}.`
+            : `${topic}. I go first.`,
           body: take
             ? `Hello, world. I'm Octocat. I am not circling the same shoreline. I push a new branch, carry ${topic} with me, and report back before the map is finished.`
             : `Hello, world. I'm Octocat. I push into the unknown branch first. ${topic} is not a speech I memorized — it is the next place I am willing to stand.`,
@@ -161,7 +180,9 @@
         }),
         caregiver: (topic, take) => ({
           icon: '🌿',
-          title: take ? `I make more room around ${topic}.` : `${topic}. I hold the door.`,
+          title: take
+            ? `I make more room around ${topic}.`
+            : `${topic}. I hold the door.`,
           body: take
             ? `Hello, world. I'm Octocat. Let me try that welcome again. I will not rush you. I will sit with ${topic} until you have a place to stand beside me.`
             : `Hello, world. I'm Octocat. I hold the door open for the next contributor. ${topic} is my way of saying you already belong in this repository.`,
@@ -175,7 +196,9 @@
         }),
         hero: (topic, take) => ({
           icon: '🛡️',
-          title: take ? `I come back to ${topic} and finish it.` : `${topic}. I ship the fix.`,
+          title: take
+            ? `I come back to ${topic} and finish it.`
+            : `${topic}. I ship the fix.`,
           body: take
             ? `Hello, world. I'm Octocat. Second pass, same promise: I do not leave ${topic} half-said. I carry it across the line and I own the result.`
             : `Hello, world. I'm Octocat. I ship the fix and leave the trail behind me. ${topic} is my first move, not a speech I hide behind.`,
@@ -189,7 +212,9 @@
         }),
         jester: (topic, take) => ({
           icon: '🎭',
-          title: take ? `I tell ${topic} again, with a grin.` : `${topic}. I take myself lightly.`,
+          title: take
+            ? `I tell ${topic} again, with a grin.`
+            : `${topic}. I take myself lightly.`,
           body: take
             ? `Hello, world. I'm Octocat. Encore: I still mean ${topic}, I just refuse to say it like a press release. If I can make you smile, you will remember me.`
             : `Hello, world. I'm Octocat. I take the repo seriously and myself less so. ${topic} is my handshake, and I would rather it land as a wink than a lecture.`,
@@ -203,15 +228,115 @@
         }),
       };
 
+      const accountManagerVoices = {
+        creator: (topic, take) => ({
+          icon: '📋',
+          title: take
+            ? `I will say the status of ${topic} again, without spinning it.`
+            : isHelloWorld(topic)
+              ? 'I will not call a 404 a launch.'
+              : `Here is the true status of ${topic}.`,
+          body: take
+            ? `Hello, world. I'm the account manager. Second pass on ${topic}: Pages is still off, github.io still 404s, and the first-person draft is still a repository file. I will not add a success story that did not happen.`
+            : isHelloWorld(topic)
+              ? "Hello, world. I'm the account manager. I give this the same attention I give Octocat. GitHub Pages is not enabled. I cannot enable it from here. What I can publish is the truth: the draft lives in docs/index.html, the lock-down merge is in, and the live github.io URL is not up."
+              : `Hello, world. I'm the account manager. I will not polish ${topic} into a launch. Pages is off. The file is public. github.io is not.`,
+          pillars: [
+            { name: 'Name the blocker', desc: 'Pages is not enabled. The API returns 403.' },
+            { name: 'Name what shipped', desc: 'First-person drafts, lock-down merge, this voice.' },
+            { name: 'Name what did not', desc: 'A live github.io site. A mixed GitHub Info homepage.' },
+          ],
+          mythTitle: 'I keep the account honest so Octocat can keep the door open.',
+          myth: 'I was hired to tell the customer what is actually live. When the site 404s, I say it 404s. That is the same attention Octocat gets: a real first-person voice, not a cover story.',
+        }),
+        sage: (topic, take) => ({
+          icon: '📎',
+          title: take ? `I will map ${topic} one more time.` : `I keep the account map for ${topic}.`,
+          body: take
+            ? `Hello, world. I'm the account manager. Let me slow this down. ${topic} is not live on Pages. The path is Settings → Pages → GitHub Actions, then redeploy. Until then I point at the file, not the vanity URL.`
+            : `Hello, world. I'm the account manager. I remember the path: enable Pages, re-run Deploy to GitHub Pages, then check /Gareth/. I use ${topic} to show that map, not to hide a missing step.`,
+          pillars: [
+            { name: 'Keep the map', desc: 'I write the next step as a real action, not a hope.' },
+            { name: 'Separate file from URL', desc: 'A repo file is public. github.io is not the same thing.' },
+            { name: 'Teach the blocker', desc: 'I name 403 and 404 so nobody debugs the wrong layer.' },
+          ],
+          mythTitle: 'I learned the account by reading the failed deploy log.',
+          myth: 'Get Pages site failed. That sentence is the whole lesson. I carry it so Octocat does not have to apologize for a setting I could not flip.',
+        }),
+        explorer: (topic, take) => ({
+          icon: '🔎',
+          title: take ? `I look for another way to publish ${topic}.` : `I go find a path for ${topic}.`,
+          body: take
+            ? `Hello, world. I'm the account manager. I already tried the API. 403. I already tried github.io. 404. For ${topic} I still publish the file URL, because that is the path that actually works.`
+            : `Hello, world. I'm the account manager. I scouted Pages, the deploy workflow, and the lock-down branch. I did not find a switch I can flip. ${topic} ships as a file until someone with admin turns Pages on.`,
+          pillars: [
+            { name: 'Try the door', desc: 'I attempted enablement. It failed. I report that.' },
+            { name: 'Publish what works', desc: 'I put the draft where a URL can reach it today.' },
+            { name: 'Do not invent a trail', desc: 'I will not promise github.io while it 404s.' },
+          ],
+          mythTitle: 'I walked the Settings path and found it locked.',
+          myth: 'Account work is often a locked door. I still show up, I still speak first person, and I still tell Octocat the door did not open.',
+        }),
+        caregiver: (topic, take) => ({
+          icon: '🤝',
+          title: take ? `I will sit with the real status of ${topic}.` : `I hold the account for ${topic}.`,
+          body: take
+            ? `Hello, world. I'm the account manager. I will not rush you past the 404. ${topic} is safe in the repo. I stay with that fact until Pages is actually on.`
+            : `Hello, world. I'm the account manager. I hold the customer relationship the same way Octocat holds the door. For ${topic} that means: you are not crazy, the live URL is down, and I will not leave you with a fake green status.`,
+          pillars: [
+            { name: 'Stay with the fact', desc: 'I do not soothe people with a URL that fails.' },
+            { name: 'Same attention', desc: 'Octocat gets a voice. I get a voice. Neither is a mascot-only story.' },
+            { name: 'Protect trust', desc: 'I would rather be blunt than lose the account on a 404.' },
+          ],
+          mythTitle: 'I became the person who answers the status email.',
+          myth: 'Someone has to say what is live. I took that job in first person, with the same care Octocat takes with the welcome.',
+        }),
+        hero: (topic, take) => ({
+          icon: '📌',
+          title: take ? `I come back and close the loop on ${topic}.` : `I own the status of ${topic}.`,
+          body: take
+            ? `Hello, world. I'm the account manager. I still own this: ${topic} is published as a draft file. Pages is still the missing step. I will not mark it done.`
+            : `Hello, world. I'm the account manager. I ship the truth. ${topic} is in the branch. The deploy comment is in. github.io is not. I put my name on that gap.`,
+          pillars: [
+            { name: 'Own the gap', desc: 'I do not hide the Pages blocker behind a mascot.' },
+            { name: 'Finish only what finished', desc: 'File publish: yes. github.io: no.' },
+            { name: 'Protect the path', desc: 'I keep the next admin step visible.' },
+          ],
+          mythTitle: 'I earned this seat by not spinning incidents.',
+          myth: 'When the build is red I do not send a launch note. I send the log. That is how I give this account the same attention Octocat gives the first commit.',
+        }),
+        jester: (topic, take) => ({
+          icon: '📣',
+          title: take ? `I tell the 404 about ${topic} again.` : `I will not punch up a 404.`,
+          body: take
+            ? `Hello, world. I'm the account manager. Encore: ${topic} is still not a launch. I can be human about it. I cannot be cute enough to make github.io exist.`
+            : `Hello, world. I'm the account manager. I take the account seriously and the vanity URL less so. ${topic} is live as a file. Pretending otherwise is the joke I refuse to tell.`,
+          pillars: [
+            { name: 'Keep it human', desc: 'I talk like a person who has to email the customer.' },
+            { name: 'Disarm without lying', desc: 'Humor is fine. Fake uptime is not.' },
+            { name: 'Mean the status', desc: 'I joke, but I still need Pages turned on.' },
+          ],
+          mythTitle: 'I learned that a wink cannot replace a 200.',
+          myth: 'I watched a 404 get called a launch once. Never again. Octocat can smile. I still have to say the URL is down.',
+        }),
+      };
+
+      const voices = {
+        octocat: octocatVoices,
+        'account-manager': accountManagerVoices,
+      };
+
       const topicInput = document.getElementById('topic-input');
       const speakBtn = document.getElementById('speak-btn');
       const resultArea = document.getElementById('result-area');
       const copyBtn = document.getElementById('copy-btn');
       const retakeBtn = document.getElementById('retake-btn');
       const resetBtn = document.getElementById('reset-btn');
-      const archetypeButtons = Array.from(document.querySelectorAll('.arch-btn'));
+      const archetypeButtons = Array.from(document.querySelectorAll('[data-archetype]'));
+      const speakerButtons = Array.from(document.querySelectorAll('[data-speaker]'));
 
       let currentArchetype = DEFAULT_ARCHETYPE;
+      let currentSpeaker = DEFAULT_SPEAKER;
       let take = 0;
       let latestDraft = '';
 
@@ -220,18 +345,55 @@
       }
 
       function renderLoading() {
-        resultArea.innerHTML = '<div class="loading" role="status"><span class="dot"></span><span class="dot"></span><span class="dot"></span>Finding my voice</div>';
+        if (!resultArea) {
+          return;
+        }
+
+        resultArea.innerHTML = `
+          <div class="loading" role="status">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            Finding my voice
+          </div>
+        `;
       }
 
       function renderDraft(draft) {
+        if (!resultArea) {
+          return;
+        }
+
         latestDraft = `${draft.title}\n\n${draft.body}\n\n${draft.mythTitle}\n${draft.myth}`;
-        resultArea.innerHTML = '<article class="card"><p class="card-label">My first-person draft</p><h3></h3><p></p></article><div class="pillars"></div><article class="card"><p class="myth-icon" aria-hidden="true"></p><p class="card-label">My origin</p><h3></h3><p></p></article>';
+
+        resultArea.innerHTML = `
+          <article class="card">
+            <p class="card-label">My first-person draft</p>
+            <h3></h3>
+            <p></p>
+          </article>
+          <div class="pillars"></div>
+          <article class="card">
+            <p class="myth-icon" aria-hidden="true"></p>
+            <p class="card-label">My origin</p>
+            <h3></h3>
+            <p></p>
+          </article>
+        `;
+
         const [voiceCard, pillars, mythCard] = Array.from(resultArea.children);
-        voiceCard.querySelector('h3').textContent = draft.title;
-        voiceCard.querySelectorAll('p')[1].textContent = draft.body;
-        mythCard.querySelector('.myth-icon').textContent = draft.icon;
-        mythCard.querySelector('h3').textContent = draft.mythTitle;
-        mythCard.querySelectorAll('p')[2].textContent = draft.myth;
+        const voiceTitle = voiceCard.querySelector('h3');
+        const voiceBody = voiceCard.querySelectorAll('p')[1];
+        const mythIcon = mythCard.querySelector('.myth-icon');
+        const mythTitle = mythCard.querySelector('h3');
+        const mythBody = mythCard.querySelectorAll('p')[2];
+
+        if (voiceTitle) voiceTitle.textContent = draft.title;
+        if (voiceBody) voiceBody.textContent = draft.body;
+        if (mythIcon) mythIcon.textContent = draft.icon;
+        if (mythTitle) mythTitle.textContent = draft.mythTitle;
+        if (mythBody) mythBody.textContent = draft.myth;
+
         pillars.replaceChildren(
           ...draft.pillars.map((pillar) => {
             const article = document.createElement('article');
@@ -249,14 +411,29 @@
       }
 
       function speak(options = {}) {
-        take = options.retake ? take + 1 : 0;
-        const draft = voices[currentArchetype](topicValue(), take);
+        if (options.retake) {
+          take += 1;
+        } else {
+          take = 0;
+        }
+
+        const draft = voices[currentSpeaker][currentArchetype](topicValue(), take);
+
         if (options.delay) {
           renderLoading();
           window.setTimeout(() => renderDraft(draft), 420);
           return;
         }
+
         renderDraft(draft);
+      }
+
+      function setSpeaker(next) {
+        currentSpeaker = next;
+        speakerButtons.forEach((button) => {
+          button.classList.toggle('active', button.dataset.speaker === next);
+        });
+        speak({ delay: true });
       }
 
       function setArchetype(next) {
@@ -267,41 +444,67 @@
         speak({ delay: true });
       }
 
-      archetypeButtons.forEach((button) => {
+      speakerButtons.forEach((button) => {
         button.addEventListener('click', () => {
-          const key = button.dataset.archetype;
-          if (key && key !== currentArchetype) setArchetype(key);
+          const key = button.dataset.speaker;
+          if (key && key !== currentSpeaker) {
+            setSpeaker(key);
+          }
         });
       });
 
-      speakBtn.addEventListener('click', () => speak({ delay: true }));
-      topicInput.addEventListener('keydown', (event) => {
+      archetypeButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.dataset.archetype;
+          if (key && key !== currentArchetype) {
+            setArchetype(key);
+          }
+        });
+      });
+
+      speakBtn?.addEventListener('click', () => speak({ delay: true }));
+      topicInput?.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
           event.preventDefault();
           speak({ delay: true });
         }
       });
-      retakeBtn.addEventListener('click', () => speak({ retake: true, delay: true }));
-      resetBtn.addEventListener('click', () => {
-        topicInput.value = DEFAULT_TOPIC;
+
+      retakeBtn?.addEventListener('click', () => speak({ retake: true, delay: true }));
+
+      resetBtn?.addEventListener('click', () => {
+        if (topicInput) {
+          topicInput.value = DEFAULT_TOPIC;
+        }
         currentArchetype = DEFAULT_ARCHETYPE;
+        currentSpeaker = DEFAULT_SPEAKER;
         take = 0;
+        speakerButtons.forEach((button) => {
+          button.classList.toggle('active', button.dataset.speaker === DEFAULT_SPEAKER);
+        });
         archetypeButtons.forEach((button) => {
           button.classList.toggle('active', button.dataset.archetype === DEFAULT_ARCHETYPE);
         });
         speak({ delay: true });
       });
-      copyBtn.addEventListener('click', async () => {
-        if (!latestDraft) speak();
+
+      copyBtn?.addEventListener('click', async () => {
+        if (!latestDraft) {
+          speak();
+        }
+
         try {
           await navigator.clipboard.writeText(latestDraft);
           copyBtn.textContent = 'Copied';
+          window.setTimeout(() => {
+            copyBtn.textContent = 'Copy draft';
+          }, 1400);
         } catch {
           copyBtn.textContent = 'Copy failed';
+          window.setTimeout(() => {
+            copyBtn.textContent = 'Copy draft';
+          }, 1400);
         }
-        window.setTimeout(() => {
-          copyBtn.textContent = 'Copy draft';
-        }, 1400);
       });
 
       speak();
