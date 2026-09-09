@@ -1,12 +1,12 @@
 {
-  "text": "Hello, world. I'm Octocat and I'm the account manager. GitHub Pages is off, so github.io still 404s. The first-person draft is a public repo file, not a live site.",
+  "text": "Hello world 🌎 I am very grateful for the opportunity to finally say hi. I'm Octocat and I'm the account manager. GitHub Pages is off, so github.io still 404s.",
   "blocks": [
     {
       "type": "header",
       "block_id": "hello_header",
       "text": {
         "type": "plain_text",
-        "text": "Hello, world",
+        "text": "Hello world 🌎",
         "emoji": true
       }
     },
@@ -15,7 +15,7 @@
       "block_id": "hello_intro",
       "text": {
         "type": "mrkdwn",
-        "text": "I'm *Octocat*. I'm the *account manager*. We both speak in first person, and we will not dress up a 404."
+        "text": "I am very grateful for the opportunity to finally say hi. I'm *Octocat*. I'm the *account manager*."
       }
     },
     {

@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello, world — I'm Octocat, and I'm the account manager</title>
-    <meta name="description" content="First-person Hello World drafts from Octocat and the account manager, including the true publish status." />
+    <title>Hello world 🌎 — I am very grateful for the opportunity to finally say hi</title>
+    <meta name="description" content="First-person Hello World from Octocat and the account manager: grateful to finally say hi, and honest about the 404." />
     <style>
       :root {
         color-scheme: light;
@@ -56,8 +56,8 @@
   </head>
   <body>
     <main class="page">
-      <h1>Hello, world</h1>
-      <p class="sub">I'm Octocat. I'm the account manager. We both speak in first person, and we will not dress up a 404.</p>
+      <h1>Hello world 🌎</h1>
+      <p class="sub">I am very grateful for the opportunity to finally say hi. I'm Octocat. I'm the account manager.</p>
 
       <article class="card">
         <p class="card-label">The truth</p>
@@ -71,7 +71,7 @@
       </div>
 
       <div class="input-row">
-        <input id="topic-input" type="text" value="Hello, world" placeholder="What should I talk about?" autocomplete="off" />
+        <input id="topic-input" type="text" value="Hello world 🌎" placeholder="What should I talk about?" autocomplete="off" />
         <button id="speak-btn" type="button">Speak</button>
       </div>
 
@@ -87,8 +87,8 @@
       <div class="result-area" id="result-area" aria-live="polite">
         <article class="card">
           <p class="card-label">My first-person draft</p>
-          <h3>Hello, world. I make the first commit.</h3>
-          <p>Hello, world. I'm Octocat. I do not wait for a perfect introduction. I open the repository, leave a trail anyone can follow, and let the work speak in my own voice.</p>
+          <h3>Hello world 🌎</h3>
+          <p>I am very grateful for the opportunity to finally say hi. I'm Octocat. This is my first-person hello, not a mascot caption.</p>
         </article>
         <div class="pillars">
           <article class="pillar">
@@ -119,12 +119,14 @@
       </div>
     </main>
     <script>
-      const DEFAULT_TOPIC = 'Hello, world';
+      const DEFAULT_TOPIC = 'Hello world 🌎';
       const DEFAULT_ARCHETYPE = 'creator';
       const DEFAULT_SPEAKER = 'octocat';
+      const HELLO_TITLE = 'Hello world 🌎';
+      const HELLO_GRATITUDE = 'I am very grateful for the opportunity to finally say hi.';
 
       function isHelloWorld(topic) {
-        return /^hello,?\s*world\.?$/i.test(topic.trim());
+        return /^hello,?\s*world(?:\s*🌎)?\.?$/iu.test(topic.trim());
       }
 
       const octocatVoices = {
@@ -132,12 +134,14 @@
           icon: '✨',
           title: take
             ? `I start again, still making ${topic}.`
-            : `${topic}. I make the first commit.`,
-          body: take
-            ? `Hello, world. I'm Octocat. This is another take, not a rewrite of someone else's copy. I keep ${topic} in my hands and shape it until it can stand on its own.`
             : isHelloWorld(topic)
-              ? "Hello, world. I'm Octocat. I do not wait for a perfect introduction. I open the repository, leave a trail anyone can follow, and let the work speak in my own voice."
-              : `Hello, world. I'm Octocat. I do not wait for a perfect introduction. I open the repository, leave a trail anyone can follow, and let ${topic} speak in my own voice.`,
+              ? HELLO_TITLE
+              : `${topic}. I make the first commit.`,
+          body: take
+            ? `Hello world 🌎. I'm Octocat. This is another take. I am still grateful to say hi, and I keep ${topic} in my own voice.`
+            : isHelloWorld(topic)
+              ? `${HELLO_GRATITUDE} I'm Octocat. This is my first-person hello, not a mascot caption.`
+              : `${HELLO_GRATITUDE} I'm Octocat. I open the repository and let ${topic} speak in my own voice.`,
           pillars: [
             { name: 'Build in public', desc: 'I show the draft, not just the polished release.' },
             { name: 'Leave a trail', desc: 'I write so the next person can pick up my thread.' },
@@ -234,13 +238,13 @@
           title: take
             ? `I will say the status of ${topic} again, without spinning it.`
             : isHelloWorld(topic)
-              ? 'I will not call a 404 a launch.'
+              ? HELLO_TITLE
               : `Here is the true status of ${topic}.`,
           body: take
-            ? `Hello, world. I'm the account manager. Second pass on ${topic}: Pages is still off, github.io still 404s, and the first-person draft is still a repository file. I will not add a success story that did not happen.`
+            ? `Hello world 🌎. I'm the account manager. I am still grateful to say hi. Second pass on ${topic}: Pages is still off, github.io still 404s, and I will not add a success story that did not happen.`
             : isHelloWorld(topic)
-              ? "Hello, world. I'm the account manager. I give this the same attention I give Octocat. GitHub Pages is not enabled. I cannot enable it from here. What I can publish is the truth: the draft lives in docs/index.html, the lock-down merge is in, and the live github.io URL is not up."
-              : `Hello, world. I'm the account manager. I will not polish ${topic} into a launch. Pages is off. The file is public. github.io is not.`,
+              ? `${HELLO_GRATITUDE} I'm the account manager. I give this the same attention I give Octocat. GitHub Pages is not enabled. I cannot enable it from here. The draft lives in docs/index.html. github.io still 404s.`
+              : `${HELLO_GRATITUDE} I'm the account manager. I will not polish ${topic} into a launch. Pages is off. The file is public. github.io is not.`,
           pillars: [
             { name: 'Name the blocker', desc: 'Pages is not enabled. The API returns 403.' },
             { name: 'Name what shipped', desc: 'First-person drafts, lock-down merge, this voice.' },
