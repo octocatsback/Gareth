@@ -1,0 +1,98 @@
+{
+  "text": "Hello, world. I'm Octocat and I'm the account manager. GitHub Pages is off, so github.io still 404s. The first-person draft is a public repo file, not a live site.",
+  "blocks": [
+    {
+      "type": "header",
+      "block_id": "hello_header",
+      "text": {
+        "type": "plain_text",
+        "text": "Hello, world",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "block_id": "hello_intro",
+      "text": {
+        "type": "mrkdwn",
+        "text": "I'm *Octocat*. I'm the *account manager*. We both speak in first person, and we will not dress up a 404."
+      }
+    },
+    {
+      "type": "section",
+      "block_id": "hello_truth",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*The truth*\nGitHub Pages is not enabled, so <https://octocatsback.github.io/Gareth/|github.io/Gareth> still 404s. I cannot turn Pages on from this environment.\n\nWhat is published: the first-person Octocat page, the lock-down merge, and this account-manager voice.\nWhat is not published: a live github.io site. Lock-down's GitHub Info homepage was not mixed into this one."
+      }
+    },
+    {
+      "type": "divider",
+      "block_id": "hello_divider"
+    },
+    {
+      "type": "section",
+      "block_id": "hello_status_fields",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Shipped*\n• Dual first-person voices\n• Truth card on the page\n• Standalone `docs/index.html`\n• PR #17 on the publish branch"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Not shipped*\n• Live github.io (404)\n• Pages enablement (403)\n• Post to Grok Bot / X / Slack\n• Mixed GitHub Info homepage"
+        }
+      ]
+    },
+    {
+      "type": "actions",
+      "block_id": "hello_links",
+      "elements": [
+        {
+          "type": "button",
+          "action_id": "open_preview_btn",
+          "style": "primary",
+          "text": {
+            "type": "plain_text",
+            "text": "Open preview",
+            "emoji": true
+          },
+          "url": "https://htmlpreview.github.io/?https://github.com/octocatsback/Gareth/blob/cursor/publish-github-pages-8fa9/docs/index.html",
+          "accessibility_label": "Open the first-person Hello World preview"
+        },
+        {
+          "type": "button",
+          "action_id": "open_file_btn",
+          "text": {
+            "type": "plain_text",
+            "text": "Repo file",
+            "emoji": true
+          },
+          "url": "https://github.com/octocatsback/Gareth/blob/cursor/publish-github-pages-8fa9/docs/index.html",
+          "accessibility_label": "Open docs/index.html on GitHub"
+        },
+        {
+          "type": "button",
+          "action_id": "open_pr_btn",
+          "text": {
+            "type": "plain_text",
+            "text": "Pull request",
+            "emoji": true
+          },
+          "url": "https://github.com/octocatsback/Gareth/pull/17",
+          "accessibility_label": "Open pull request 17"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "block_id": "hello_context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "This is a Slack *message* payload. It has not been posted: Slack and X connectors failed discovery, and there is no Grok Bot publish API from this Cloud Agent."
+        }
+      ]
+    }
+  ]
+}
